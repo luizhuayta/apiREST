@@ -57,13 +57,17 @@ Los reportes HTML quedan en `results/jmeter/load-report/` y `results/jmeter/stre
 
 ### `stress-test.jmx` — Prueba de Estrés
 
-| Parámetro | Valor |
-|-----------|-------|
-| Thread Group (usuarios) | 400 (máximo) |
-| Ramp-up | 75 segundos |
-| Duración | 90 segundos |
-| Timeout | 10 segundos |
-| Endpoint | `GET /api/v1/heavy-process` |
+5 etapas secuenciales (ya configuradas, no tocar nada):
+
+| Etapa | Usuarios (Threads) | Ramp-up | Duración |
+|-------|-------------------|---------|----------|
+| 1 | **50** | 15 s | 15 s |
+| 2 | **100** | 15 s | 15 s |
+| 3 | **200** | 15 s | 15 s |
+| 4 | **300** | 15 s | 15 s |
+| 5 | **400** | 15 s | 15 s |
+
+Endpoint: `GET /api/v1/heavy-process` · Timeout: 10 s
 
 ## Variables de entorno opcionales
 
