@@ -1,23 +1,11 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal EnableExtensions
 
 set "ROOT_DIR=%~dp0.."
-set "JMETER_VERSION=5.6.3"
 set "RESULTS_DIR=%ROOT_DIR%\results\jmeter"
 
-if defined JMETER_HOME (
-  set "JMETER_BIN=%JMETER_HOME%\bin\jmeter.bat"
-) else if exist "%ROOT_DIR%\tools\apache-jmeter-%JMETER_VERSION%\bin\jmeter.bat" (
-  set "JMETER_BIN=%ROOT_DIR%\tools\apache-jmeter-%JMETER_VERSION%\bin\jmeter.bat"
-) else (
-  where jmeter >nul 2>&1
-  if %ERRORLEVEL%==0 (
-    set "JMETER_BIN=jmeter"
-  ) else (
-    echo JMeter no encontrado. Ejecuta primero: scripts\setup-jmeter.bat
-    exit /b 1
-  )
-)
+call "%~dp0jmeter-common.bat"
+if errorlevel 1 exit /b 1
 
 if not exist "%RESULTS_DIR%" mkdir "%RESULTS_DIR%"
 
@@ -27,9 +15,11 @@ if not defined PORT set "PORT=3000"
 echo === Prueba de Carga JMeter ===
 echo Plan: tests\jmeter\load-test.jmx
 echo API: http://%HOST%:%PORT%
+echo JMeter: %JMETER_BIN%
 echo.
 
-call "%JMETER_BIN%" -n ^
+cd /d "%JMETER_HOME_DIR%\bin"
+call jmeter.bat -n ^
   -t "%ROOT_DIR%\tests\jmeter\load-test.jmx" ^
   -l "%RESULTS_DIR%\load-results.jtl" ^
   -j "%RESULTS_DIR%\load-jmeter.log" ^
@@ -37,6 +27,12 @@ call "%JMETER_BIN%" -n ^
   -JHOST=%HOST% ^
   -JPORT=%PORT%
 
+if errorlevel 1 (
+  echo.
+  echo Fallo la prueba. Prueba la GUI: scripts\abrir-jmeter-carga.bat
+  exit /b 1
+)
+
 echo.
-echo Listo. Abre el reporte HTML en:
+echo Listo. Abre el reporte:
 echo   %RESULTS_DIR%\load-report\index.html

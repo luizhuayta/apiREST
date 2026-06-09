@@ -73,6 +73,16 @@ INFORME_TECNICO.md         # Informe completo
 INFORME_NOTION_SEMANA11.md # Formato para Notion
 ```
 
+## PC de universidad (sin permisos / sin internet)
+
+Si los scripts fallan con error de `ApacheJMeter.jar`, lee **[GUIA-PC-UNIVERSIDAD.md](./GUIA-PC-UNIVERSIDAD.md)**.
+
+**Atajo GUI (más fácil):**
+```bat
+scripts\abrir-jmeter-carga.bat
+scripts\abrir-jmeter-estres.bat
+```
+
 ## Abrir planes en JMeter GUI
 
 1. Abre Apache JMeter
