@@ -1,6 +1,6 @@
 {
-  "name": "workspace",
-  "version": "1.0.0",
+  "name": "apirest-pruebas-no-funcionales",
+  "version": "1.1.0",
   "description": "",
   "main": "server.js",
   "directories": {
@@ -8,9 +8,12 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test:load": "k6 run tests/load-test.js",
-    "test:stress": "k6 run tests/stress-test.js",
-    "test:security": "./tests/security-tests.sh"
+    "setup:jmeter": "./scripts/setup-jmeter.sh",
+    "test:load": "./scripts/run-jmeter-load.sh",
+    "test:stress": "./scripts/run-jmeter-stress.sh",
+    "test:security": "./tests/security-tests.sh",
+    "test:load:k6": "k6 run tests/load-test.js",
+    "test:stress:k6": "k6 run tests/stress-test.js"
   },
   "repository": {
     "type": "git",

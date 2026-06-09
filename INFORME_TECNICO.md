@@ -3,7 +3,7 @@
 **Proyecto:** API REST vulnerable (Node.js + Express + SQLite)  
 **Fecha de ejecución:** 9 de junio de 2026  
 **Entorno:** `http://localhost:3000` (base de datos SQLite en memoria)  
-**Herramientas:** K6 (rendimiento), cURL (seguridad OWASP)
+**Herramientas:** Apache JMeter 5.6.3 (rendimiento), cURL (seguridad OWASP)
 
 ---
 
@@ -54,7 +54,7 @@ Antes de la prueba de carga, se midió la latencia con peticiones individuales:
 
 ### 3.2 Escenario 1: Prueba de Carga
 
-**Herramienta:** K6 (`tests/load-test.js`)
+**Herramienta:** Apache JMeter (`tests/jmeter/load-test.jmx`)
 
 | Parámetro | Valor |
 |-----------|-------|
@@ -91,7 +91,7 @@ Aunque no hubo errores HTTP al 50 % de concurrencia, la latencia deja de ser ace
 
 ### 3.3 Escenario 2: Prueba de Estrés (búsqueda del breakpoint)
 
-**Herramienta:** K6 (`tests/stress-test.js`)
+**Herramienta:** Apache JMeter (`tests/jmeter/stress-test.jmx`)
 
 | Etapa | Duración | VUs objetivo |
 |-------|----------|--------------|
@@ -250,8 +250,10 @@ En seguridad, se confirmaron **dos vulnerabilidades del OWASP Top 10** (inyecci�
 
 | Archivo | Contenido |
 |---------|-----------|
-| `tests/load-test.js` | Script K6 — prueba de carga (50 VUs) |
-| `tests/stress-test.js` | Script K6 — prueba de estrés (hasta 400 VUs) |
+| `tests/jmeter/load-test.jmx` | Plan JMeter — prueba de carga (50 usuarios) |
+| `tests/jmeter/stress-test.jmx` | Plan JMeter — prueba de estrés (hasta 400 usuarios) |
+| `scripts/run-jmeter-load.sh` | Ejecutor automático de carga (Linux/Mac) |
+| `scripts/run-jmeter-load.bat` | Ejecutor automático de carga (Windows) |
 | `tests/security-tests.sh` | Script de pruebas SQLi y XSS |
 | `results/load-test-output.txt` | Salida completa de la prueba de carga |
 | `results/stress-test-output.txt` | Salida completa de la prueba de estrés |
@@ -262,10 +264,16 @@ En seguridad, se confirmaron **dos vulnerabilidades del OWASP Top 10** (inyecci�
 
 ```bash
 npm install
-node server.js
+npm start
 
-# En otra terminal:
-k6 run tests/load-test.js
-k6 run tests/stress-test.js
-./tests/security-tests.sh
+# En otra terminal (Linux/Mac):
+./scripts/setup-jmeter.sh
+npm run test:load
+npm run test:stress
+npm run test:security
+
+# Windows:
+scripts\setup-jmeter.bat
+scripts\run-jmeter-load.bat
+scripts\run-jmeter-stress.bat
 ```

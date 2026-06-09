@@ -2,7 +2,7 @@
 
 ## Informe del Taller
 
-### Ejecución de Pruebas No Funcionales en una API REST aplicando K6 y OWASP Top 10
+### Ejecución de Pruebas No Funcionales en una API REST aplicando JMeter y OWASP Top 10
 
 **Integrantes:**
 - Cano De La Cruz, Joseph Jesús
@@ -20,7 +20,7 @@
 |-------|---------|
 | **Proyecto** | API REST vulnerable (Node.js + Express + SQLite) |
 | **Entorno de pruebas** | `http://localhost:3000` (base de datos SQLite en memoria) |
-| **Herramientas utilizadas** | K6 (rendimiento), cURL (seguridad OWASP) |
+| **Herramientas utilizadas** | Apache JMeter 5.6.3 (rendimiento), cURL (seguridad OWASP) |
 | **Repositorio** | https://github.com/luizhuayta/apiREST |
 
 ---
@@ -82,7 +82,7 @@ Antes de la prueba de carga, se midió la latencia con peticiones individuales:
 
 ### 4.2 Escenario 1: Prueba de Carga
 
-**Herramienta:** K6 (`tests/load-test.js`)
+**Herramienta:** Apache JMeter (`tests/jmeter/load-test.jmx`)
 
 | Parámetro | Valor |
 |-----------|-------|
@@ -117,7 +117,7 @@ Aunque no hubo errores HTTP con 50 usuarios concurrentes, la latencia deja de se
 
 ### 4.3 Escenario 2: Prueba de Estrés (búsqueda del breakpoint)
 
-**Herramienta:** K6 (`tests/stress-test.js`)
+**Herramienta:** Apache JMeter (`tests/jmeter/stress-test.jmx`)
 
 | Etapa | Duración | VUs objetivo |
 |-------|----------|--------------|
@@ -272,8 +272,8 @@ En seguridad, se confirmaron **dos vulnerabilidades del OWASP Top 10** (inyecci�
 
 | Archivo | Contenido |
 |---------|-----------|
-| `tests/load-test.js` | Script K6 — prueba de carga (50 VUs) |
-| `tests/stress-test.js` | Script K6 — prueba de estrés (hasta 400 VUs) |
+| `tests/jmeter/load-test.jmx` | Plan JMeter — prueba de carga (50 usuarios) |
+| `tests/jmeter/stress-test.jmx` | Plan JMeter — prueba de estrés (hasta 400 usuarios) |
 | `tests/security-tests.sh` | Script de pruebas SQLi y XSS |
 | `results/load-test-output.txt` | Salida completa de la prueba de carga |
 | `results/stress-test-output.txt` | Salida completa de la prueba de estrés |
@@ -287,7 +287,8 @@ npm install
 node server.js
 
 # En otra terminal:
-k6 run tests/load-test.js
-k6 run tests/stress-test.js
-./tests/security-tests.sh
+./scripts/setup-jmeter.sh
+npm run test:load
+npm run test:stress
+npm run test:security
 ```
