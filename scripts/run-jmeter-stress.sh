@@ -11,7 +11,7 @@ RESULTS_DIR="${RESULTS_DIR:-$ROOT_DIR/results/jmeter}"
 mkdir -p "$RESULTS_DIR"
 
 HOST="${HOST:-localhost}"
-PORT="${PORT:-3000}"
+PORT="${PORT:-3500}"
 
 echo "=== Prueba de Estrés JMeter ==="
 echo "Plan: tests/jmeter/stress-test.jmx"

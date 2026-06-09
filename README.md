@@ -1,103 +1,47 @@
-# apiREST — Pruebas No Funcionales (Semana 11)
+# TiendaVirtual API — Pruebas No Funcionales (Semana 11)
 
-API REST vulnerable para prácticas de rendimiento con **Apache JMeter** y seguridad **OWASP**.
+API REST de una **tienda en línea** (intencionalmente vulnerable) para prácticas con **Apache JMeter** y **OWASP**.
+
+> **Rama de entrega:** `cursor/tienda-virtual-entrega-ac48` — variante diferenciada del proyecto base.
 
 ## Requisitos
 
 - Node.js 18+
-- Java 8+ (para JMeter)
+- Java 8+ (JMeter GUI o portable)
 
-## Inicio rápido (3 pasos)
-
-### 1. Levantar la API
+## Inicio rápido
 
 ```bash
 npm install
 npm start
 ```
 
-La API queda en `http://localhost:3000`.
+La API queda en **`http://localhost:3500`**.
 
-### 2. Instalar JMeter (solo la primera vez)
+## Endpoints
 
-**Windows:**
+| Método | Ruta | Uso |
+|--------|------|-----|
+| GET | `/api/v2/tienda/estado` | Health check |
+| GET | `/api/v2/tienda/calcular-pedido` | Prueba de rendimiento (JMeter) |
+| POST | `/api/v2/tienda/acceso-personal` | Login — prueba SQLi |
+| POST/GET | `/api/v2/tienda/resenas` | Reseñas — prueba XSS |
+
+## Pruebas con JMeter GUI
+
+1. `npm start`
+2. Abrir JMeter → **File → Open**
+3. Cargar `tests/jmeter/load-test.jmx` o `stress-test.jmx`
+4. Clic en **Start** ▶
+
+Los planes ya tienen **50 usuarios** (carga) y **50→400** (estrés) configurados.
+
+## Pruebas de seguridad
+
 ```bat
-scripts\setup-jmeter.bat
-```
-
-**Linux / Mac:**
-```bash
-chmod +x scripts/*.sh
-./scripts/setup-jmeter.sh
-```
-
-> También puedes descargar JMeter manualmente desde https://jmeter.apache.org/download_jmeter.cgi y definir `JMETER_HOME`.
-
-### 3. Ejecutar pruebas
-
-**Windows:**
-```bat
-scripts\run-jmeter-load.bat
-scripts\run-jmeter-stress.bat
 scripts\run-jmeter-security.bat
 ```
 
-**Linux / Mac:**
-```bash
-npm run test:load
-npm run test:stress
-npm run test:security
-```
+## Informe
 
-## Reportes generados
-
-| Prueba | Reporte HTML |
-|--------|--------------|
-| Carga | `results/jmeter/load-report/index.html` |
-| Estrés | `results/jmeter/stress-report/index.html` |
-| Seguridad | `results/security-*.txt` |
-
-## Estructura del proyecto
-
-```
-server.js                  # API vulnerable
-tests/jmeter/
-  load-test.jmx            # 50 usuarios, ramp-up 10s
-  stress-test.jmx          # hasta 400 usuarios
-tests/security-tests.sh    # SQLi y XSS
-scripts/
-  setup-jmeter.sh/.bat     # descarga JMeter automático
-  run-jmeter-load.sh/.bat
-  run-jmeter-stress.sh/.bat
-INFORME_TECNICO.md         # Informe completo
-INFORME_NOTION_SEMANA11.md # Formato para Notion
-```
-
-## PC de universidad (sin permisos / sin internet)
-
-Si los scripts fallan con error de `ApacheJMeter.jar`, lee **[GUIA-PC-UNIVERSIDAD.md](./GUIA-PC-UNIVERSIDAD.md)**.
-
-**Atajo GUI (más fácil):**
-```bat
-scripts\abrir-jmeter-carga.bat
-scripts\abrir-jmeter-estres.bat
-```
-
-## Abrir planes en JMeter GUI
-
-1. Abre Apache JMeter
-2. **File → Open** → `tests/jmeter/load-test.jmx`
-3. Clic en **Start** (botón verde)
-
-Ver detalle en [tests/jmeter/README.md](./tests/jmeter/README.md).
-
-## Informe del taller
-
-Ver [INFORME_TECNICO.md](./INFORME_TECNICO.md) para métricas, hallazgos y recomendaciones.
-
-## Versiones
-
-| Tag | Descripción |
-|-----|-------------|
-| `v1.0.0` | Primera versión con K6 |
-| `v1.1.0` | JMeter configurado + scripts listos para ejecutar |
+Ver `INFORME_TIENDA_VIRTUAL.md`

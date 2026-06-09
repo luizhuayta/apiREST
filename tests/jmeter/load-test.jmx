@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Prueba de Carga - API REST">
-      <stringProp name="TestPlan.comments">Guía Práctica 11 — 50 usuarios concurrentes, ramp-up 10s, duración 40s. Endpoint: GET /api/v1/heavy-process</stringProp>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Prueba de Carga - TiendaVirtual API">
+      <stringProp name="TestPlan.comments">Guía Práctica 11 — 50 usuarios concurrentes, ramp-up 10s, duración 40s. Endpoint: GET /api/v2/tienda/calcular-pedido</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
@@ -15,7 +15,7 @@
           </elementProp>
           <elementProp name="PORT" elementType="Argument">
             <stringProp name="Argument.name">PORT</stringProp>
-            <stringProp name="Argument.value">3000</stringProp>
+            <stringProp name="Argument.value">3500</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -38,7 +38,7 @@
       <hashTree>
         <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
           <stringProp name="HTTPSampler.domain">${__P(HOST,localhost)}</stringProp>
-          <stringProp name="HTTPSampler.port">${__P(PORT,3000)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(PORT,3500)}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.connect_timeout">10000</stringProp>
           <stringProp name="HTTPSampler.response_timeout">60000</stringProp>
@@ -48,8 +48,8 @@
           <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET /api/v1/heavy-process">
-          <stringProp name="HTTPSampler.path">/api/v1/heavy-process</stringProp>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET calcular-pedido">
+          <stringProp name="HTTPSampler.path">/api/v2/tienda/calcular-pedido</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>

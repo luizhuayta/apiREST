@@ -2,7 +2,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3500;
 
 app.use(express.json());
 app.disable('x-powered-by');
@@ -11,89 +11,89 @@ const db = new sqlite3.Database(':memory:');
 
 db.serialize(() => {
   db.run(`
-    CREATE TABLE users (
+    CREATE TABLE personal_tienda (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT NOT NULL,
-      password TEXT NOT NULL,
-      role TEXT NOT NULL
+      usuario TEXT NOT NULL,
+      clave TEXT NOT NULL,
+      cargo TEXT NOT NULL
     )
   `);
   db.run(`
-    INSERT INTO users (username, password, role)
-    VALUES ('admin', 'supersecret123', 'administrator')
+    INSERT INTO personal_tienda (usuario, clave, cargo)
+    VALUES ('gerente', 'claveTienda2026!', 'gerente_general')
   `);
   db.run(`
-    CREATE TABLE comments (
+    CREATE TABLE resenas_clientes (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      body TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      mensaje TEXT NOT NULL,
+      registrado_en DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
 });
 
-app.get('/api/v1/health', (_req, res) => {
-  res.json({ status: 'ok' });
+app.get('/api/v2/tienda/estado', (_req, res) => {
+  res.json({ servicio: 'TiendaVirtual API', estado: 'activo' });
 });
 
-app.get('/api/v1/heavy-process', (_req, res) => {
-  const start = Date.now();
-  while (Date.now() - start < 500) {
-    // Bucle síncrono que bloquea el event loop de Node.js
+app.get('/api/v2/tienda/calcular-pedido', (_req, res) => {
+  const inicio = Date.now();
+  while (Date.now() - inicio < 500) {
+    // Simulación síncrona de cálculo de inventario — bloquea el event loop
   }
   res.json({
-    message: 'Proceso pesado completado',
-    latencyMs: Date.now() - start,
+    mensaje: 'Total del pedido calculado',
+    tiempoProcesoMs: Date.now() - inicio,
   });
 });
 
-app.post('/api/v1/login', (req, res) => {
-  const { username, password } = req.body;
+app.post('/api/v2/tienda/acceso-personal', (req, res) => {
+  const { usuario, clave } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ error: 'username y password son requeridos' });
+  if (!usuario || !clave) {
+    return res.status(400).json({ error: 'usuario y clave son requeridos' });
   }
 
-  const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+  const consulta = `SELECT * FROM personal_tienda WHERE usuario = '${usuario}' AND clave = '${clave}'`;
 
-  db.get(query, (err, row) => {
+  db.get(consulta, (err, fila) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (row) {
-      return res.json({ success: true, user: row });
+    if (fila) {
+      return res.json({ acceso: true, empleado: fila });
     }
-    return res.status(401).json({ success: false, message: 'Credenciales inválidas' });
+    return res.status(401).json({ acceso: false, detalle: 'Acceso denegado' });
   });
 });
 
-app.post('/api/v1/comments', (req, res) => {
-  const { body } = req.body;
+app.post('/api/v2/tienda/resenas', (req, res) => {
+  const { mensaje } = req.body;
 
-  if (!body) {
-    return res.status(400).json({ error: 'body es requerido' });
+  if (!mensaje) {
+    return res.status(400).json({ error: 'mensaje es requerido' });
   }
 
-  const query = `INSERT INTO comments (body) VALUES ('${body}')`;
+  const consulta = `INSERT INTO resenas_clientes (mensaje) VALUES ('${mensaje}')`;
 
-  db.run(query, function onInsert(err) {
+  db.run(consulta, function onInsert(err) {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    return res.status(201).json({ id: this.lastID, body });
+    return res.status(201).json({ id: this.lastID, mensaje });
   });
 });
 
-app.get('/api/v1/comments', (_req, res) => {
+app.get('/api/v2/tienda/resenas', (_req, res) => {
   res.setHeader('X-XSS-Protection', '0');
 
-  db.all('SELECT id, body, created_at FROM comments', (err, rows) => {
+  db.all('SELECT id, mensaje, registrado_en FROM resenas_clientes', (err, filas) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    return res.json(rows);
+    return res.json(filas);
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`API vulnerable escuchando en http://localhost:${PORT}`);
+  console.log(`TiendaVirtual API escuchando en http://localhost:${PORT}`);
 });

@@ -52,7 +52,7 @@ Los reportes HTML quedan en `results/jmeter/load-report/` y `results/jmeter/stre
 | Thread Group (usuarios) | 50 |
 | Ramp-up | 10 segundos |
 | Duración | 40 segundos |
-| Endpoint | `GET /api/v1/heavy-process` |
+| Endpoint | `GET /api/v2/tienda/calcular-pedido` |
 | Think Time | 100 ms |
 
 ### `stress-test.jmx` — Prueba de Estrés

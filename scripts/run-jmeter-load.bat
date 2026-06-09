@@ -10,7 +10,7 @@ if errorlevel 1 exit /b 1
 if not exist "%RESULTS_DIR%" mkdir "%RESULTS_DIR%"
 
 if not defined HOST set "HOST=localhost"
-if not defined PORT set "PORT=3000"
+if not defined PORT set "PORT=3500"
 
 echo === Prueba de Carga JMeter ===
 echo Plan: tests\jmeter\load-test.jmx
